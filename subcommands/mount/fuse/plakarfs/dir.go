@@ -173,7 +173,7 @@ func (d *Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
 		if err != nil {
 			return nil, err
 		}
-
+		//@todo This is probably where the new top level handling goes
 		snapshotIDs, err := locate.LocateSnapshotIDs(d.pfs.repo, d.pfs.locateOptions)
 		if err != nil {
 			return nil, err

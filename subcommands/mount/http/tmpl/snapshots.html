@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <title>Plakar Repo HTTP Mount Snapshots</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Origin</th>
+        <th scope="col">Time</th>
+        <th scope="col">Tags</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{range .}}
+    <tr>
+        <td><a href="/snapshot/{{.ID}}">{{.ShortID}}</a></td>
+        <td>{{.Origin}}</td>
+        <td title="{{.TimeStamp}}">{{.Time}}</td>
+        <td>{{.Tags}}</td>
+    </tr>
+    {{else}}
+    <tr>
+        <td colspan="4">No snapshots found</td>
+    </tr>
+    {{end}}
+    </tbody>
+</table>
+</body>
+</html>

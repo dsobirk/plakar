@@ -38,7 +38,9 @@ type Mount struct {
 
 	SnapshotPath string
 
-	fs fs.FS
+	fs   fs.FS
+	Cert string
+	Key  string
 }
 
 func init() {
@@ -53,6 +55,9 @@ func (cmd *Mount) Parse(ctx *appcontext.AppContext, args []string) error {
 		fmt.Fprintf(flags.Output(), "Usage: %s [-to PATH] [snapshotID]\n", flags.Name())
 	}
 	flags.StringVar(&cmd.Mountpoint, "to", "", "mount point")
+	flags.StringVar(&cmd.Cert, "cert", "", "Full certificate chain")
+	flags.StringVar(&cmd.Key, "key", "", "Certificate private key")
+
 	cmd.LocateOptions.InstallLocateFlags(flags)
 	flags.Parse(args)
 
@@ -88,8 +93,8 @@ func (cmd *Mount) Execute(ctx *appcontext.AppContext, repo *repository.Repositor
 		chrootFS = subFS
 	}
 
-	if strings.HasPrefix(cmd.Mountpoint, "http://") {
-		return http.ExecuteHTTP(ctx, repo, cmd.Mountpoint, cmd.LocateOptions, chrootFS)
+	if strings.HasPrefix(cmd.Mountpoint, "http://") || strings.HasPrefix(cmd.Mountpoint, "https://") {
+		return http.ExecuteHTTP(ctx, repo, cmd.Mountpoint, cmd.LocateOptions, chrootFS, cmd.Cert, cmd.Key)
 	}
 	return fuse.ExecuteFUSE(ctx, repo, cmd.Mountpoint, cmd.LocateOptions, chrootFS)
 }
